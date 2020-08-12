@@ -9,7 +9,7 @@ def main(args):
         for argument in args[1:]:
             #need to check input of equations to be valid
             deg_arg = calculations.degree_poly(argument) #find the degree of the polynomial
-            # red_arg = reduce_poly(argument) #reduce/simplify the polynomial equation
+            red_arg = calculations.reduce_poly(argument) #reduce/simplify the polynomial equation
             # answer = []
             # if deg_arg <= 2:
             #     disc = discriminant_poly(red_arg) #find the discriminant of the polynomial
