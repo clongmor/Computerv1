@@ -31,5 +31,6 @@ def main(args):
             # else:
             #     print "General Error\n"
             print (deg_arg)
+            print (red_arg)
 main(args)
 print ("The programme is now ending")
