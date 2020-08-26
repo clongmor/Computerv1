@@ -128,5 +128,8 @@ def discriminant_poly(eqn):
 
     return (terms)
 
-# def solve_poly(eqn):
-#     #some stuff
+def solve_poly(vars_dict):
+    answer_list = helper.quadratic_formula(vars_dict["a"], vars_dict["b"], vars_dict["c"])
+
+    return (answer_list)
+    #some stuff

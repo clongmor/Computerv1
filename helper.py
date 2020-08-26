@@ -11,23 +11,25 @@ def is_negative(string):
     else:
         return False
 
+def to_number(string):
+    if string.isdigit():
+        int(string)
+    else:
+        try:
+            float(string)
+            return float(string)
+        except ValueError:
+            exit(0)
+
 def quadratic_formula(a, b, c):
-    a = int(a)
-    b = int(b)
-    c = int(c)
+    print (a, b, c)
     answer1 = (-b + (b*b - 4*a*c)**0.5)/(2*a)
     answer2 = (-b - (b*b - 4*a*c)**0.5)/(2*a)
-    try:
-        answer1 = int(answer1)
-        answer1 = str(answer1)
-    except:
-        answer1 = str(answer1)
-    
-    try:
-        answer2 = int(answer2)
-        answer2 = str(answer2)
-    except:
-        answer2 = str(answer2)
-    
+
+    print(answer1, answer2)
+    answer1 = str(answer1)
+    answer2 = str(answer2)
+
+    print(answer1, answer2)
     answers = [answer1, answer2]
     return (answers)
