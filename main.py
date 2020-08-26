@@ -10,11 +10,12 @@ def main(args):
             #need to check input of equations to be valid
             deg_arg = calculations.degree_poly(argument) #find the degree of the polynomial
             red_arg = calculations.reduce_poly(argument) #reduce/simplify the polynomial equation
-            # answer = []
-            # if deg_arg <= 2:
-            #     disc = discriminant_poly(red_arg) #find the discriminant of the polynomial
-            #     answer = solve_poly(red_arg) #use the simplified form of the equation to solve for the answer(s).
-            # print "Reduced form: ", red_arg, "\n"
+            answer = []
+            if deg_arg <= 2:
+                terms = calculations.discriminant_poly(red_arg) #find the discriminant of the polynomial
+                disc = terms["discriminant"]
+                answer = calculations.solve_poly(terms) #use the simplified form of the equation to solve for the answer(s).
+            # # print "Reduced form: ", red_arg, "\n"
             # print "Polynomial degree: ", deg_arg, "\n"
             # if not answer:
             #     print "The Polynomial degree is strictly greater than 2, I can't solve.\n"
@@ -32,5 +33,6 @@ def main(args):
             #     print "General Error\n"
             print (deg_arg)
             print (red_arg)
+            print (disc)
+
 main(args)
-print ("The programme is now ending")

@@ -81,8 +81,52 @@ def reduce_poly(eqn):
     reduced_form = " ".join(l_vars)      
     return (reduced_form)
 
-# def discriminant_poly(eqn):
-#     #some stuff
+def discriminant_poly(eqn):
+    terms = {
+        "a" : 0,
+        "b" : 0,
+        "c" : 0
+    }
+    eqn_halves = eqn.split("=")
+    l_vars= eqn_halves[0].split()
+
+    #makes co-efficients negative as needed
+    length_l = len(l_vars)
+    i = 0
+    while i < length_l - 1:
+        if l_vars[i] == "-" and l_vars[i + 1].isdigit():
+            l_vars[i + 1] = str(int(l_vars[i + 1]) * -1)
+        elif l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
+            l_vars[i + 1] = str(float(l_vars[i + 1]) * -1)
+        i = i + 1
+    #pulls out the a b and c coefficients of the equation
+    i = 0
+    while i < length_l:
+        if re.match("X{1}\^{1}[0]{1}", l_vars[i]) and l_vars[i - 2].isdigit():
+            terms["c"] = int(l_vars[i - 2])
+            terms["clet"] = l_vars[i]
+        elif re.match("X{1}\^{1}[0]{1}", l_vars[i]) and helper.is_number(l_vars[i - 2]):
+            terms["c"] = float(l_vars[i - 2])
+            terms["clet"] = l_vars[i]
+        elif re.match("X{1}\^{1}[1]{1}", l_vars[i]) and l_vars[i - 2].isdigit():
+            terms["b"] = int(l_vars[i - 2])
+            terms["blet"] = l_vars[i]
+        elif re.match("X{1}\^{1}[1]{1}", l_vars[i]) and helper.is_number(l_vars[i - 2]):
+            terms["b"] = float(l_vars[i - 2])
+            terms["blet"] = l_vars[i]
+        elif re.match("X{1}\^{1}[2]{1}", l_vars[i]) and l_vars[i - 2].isdigit():
+            terms["a"] = int(l_vars[i - 2])
+            terms["alet"] = l_vars[i]
+        elif re.match("X{1}\^{1}[2]{1}", l_vars[i]) and helper.is_number(l_vars[i - 2]):
+            terms["a"] = float(l_vars[i - 2])
+            terms["alet"] = l_vars[i]
+        i = i + 1
+
+    #calculates the discriminant
+    disc = terms["b"]**2 - 4*terms["a"]*terms["c"]
+    terms["discriminant"] = disc
+
+    return (terms)
 
 # def solve_poly(eqn):
 #     #some stuff
