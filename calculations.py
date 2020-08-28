@@ -3,9 +3,11 @@ import helper
 
 def degree_poly(eqn):
     exponents_list = []
-    variables_list = re.findall("X{1}\^{1}[0-9]{1}", eqn)
+    variables_list = re.findall("X{1}\^{1}[0-9]", eqn)
     if not variables_list:
-        return (0)
+        #try to find simple poly format i.e. X^2 + X + c
+        print("error no variables with exponents given")
+        exit(0)
 
     for var in variables_list:
         digit = (re.search(r"\d", var)).group()
@@ -25,18 +27,42 @@ def reduce_poly(eqn):
     r_vars = r_side.split()
     l_vars = l_side.split()
 
-    #makes co-efficients negative as needed
+    #makes co-efficients negative as needed and adds in co-efficients and * where non-existent
     length_l = len(l_vars)
     length_r = len(r_vars)
     i = 0
     j = 0
     while i < length_l - 1:
-        if l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
-            l_vars[i + 1] = str(float(l_vars[i + 1]) * -1)
+        if i == 0 and re.findall("X{1}\^{1}[0-9]", l_vars[i]):
+            l_vars.insert(i, "*")
+            l_vars.insert(i, "1")
+            length_l += 1
+        elif l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
+            l_vars[i + 1] = str(helper.to_negative(l_vars[i + 1]))
+        elif l_vars[i] == "-" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
+            l_vars.insert(i + 1, "*")
+            l_vars.insert(i + 1, "-1")
+            length_l += 2
+        elif l_vars[i] == "+" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
+            l_vars.insert(i + 1, "*")
+            l_vars.insert(i + 1, "1")
+            length_l += 2
         i = i + 1
     while j < length_r - 1:
-        if r_vars[j] == "-" and helper.is_number(r_vars[j + 1]):
-            r_vars[j + 1] = str(float(r_vars[j + 1]) * -1)
+        if j == 0 and re.findall("X{1}\^{1}[0-9]", r_vars[j]):
+            r_vars.insert(j, "*")
+            r_vars.insert(j, "1")
+            length_r += 1
+        elif r_vars[j] == "-" and helper.is_number(r_vars[j + 1]):
+            r_vars[j + 1] = str(helper.to_negative(r_vars[j + 1]))
+        elif r_vars[j] == "-" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
+            r_vars.insert(j + 1, "*")
+            r_vars.insert(j + 1, "-1")
+            length_r += 2
+        elif r_vars[j] == "+" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
+            r_vars.insert(j + 1, "*")
+            r_vars.insert(j + 1, "1")
+            length_r +=2
         j = j + 1
     
     #does the addition/subtraction of like x power co-efficients
@@ -44,17 +70,23 @@ def reduce_poly(eqn):
     j = 0
     check = 0
     while j < length_r:
-        if re.findall("X{1}\^{1}[0-9]{1}", r_vars[j]):
+        if re.findall("X{1}\^{1}[0-9]", r_vars[j]):
             while i < length_l:
                 if r_vars[j] == l_vars[i]:
-                    if r_vars[j - 2].isdigit():
+                    if r_vars[j - 2].isdigit() and "*" in r_vars[j - 1]:
                         r_vars[j - 2] = int(r_vars[j - 2])
-                    else:
+                    elif helper.is_number(r_vars[j - 2]) and "*" in r_vars[j - 1]:
                         r_vars[j - 2] = float(r_vars[j - 2])
-                    if l_vars[i - 2].isdigit():
+                    elif helper.is_number(r_vars[j - 2]) == False and "*" in r_vars[j - 1]:
+                        print("On the right side of the equation, co-efficient of", r_vars[j], "is not a number.")
+                        exit(0)
+                    if l_vars[i - 2].isdigit() and "*" in l_vars[i - 1]:
                         l_vars[i - 2] = int(l_vars[i - 2])
-                    else:
+                    elif helper.is_number(l_vars[i - 2]) and "*" in l_vars[i - 1]:
                         l_vars[i - 2] = float(l_vars[i - 2])
+                    elif helper.is_number(l_vars[i - 2]) == False and "*" in l_vars[i - 1]:
+                        print("On the right side of the equation, co-efficient of", l_vars[i], "is not a number.")
+                        exit(0)
                     l_vars[i - 2] = str(l_vars[i - 2] - r_vars[j - 2])
                     check = 1
                 i = i + 1
@@ -95,9 +127,7 @@ def discriminant_poly(eqn):
     i = 0
     while i < length_l - 1:
         if l_vars[i] == "-" and l_vars[i + 1].isdigit():
-            l_vars[i + 1] = str(int(l_vars[i + 1]) * -1)
-        elif l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
-            l_vars[i + 1] = str(float(l_vars[i + 1]) * -1)
+            l_vars[i + 1] = str(helper.to_negative(l_vars[i + 1]))
         i = i + 1
     #pulls out the a b and c coefficients of the equation
     i = 0

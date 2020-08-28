@@ -30,3 +30,5 @@ There may be special cases that you need to manage. For example, for the followi
 discriminant > 0 = 2 distinct real roots
 discriminant = 0 = 1 double root
 discriminant < 0 = no real roots
+
+output is 0.0 when a = 0 and c = 0. can hard code i guess.
