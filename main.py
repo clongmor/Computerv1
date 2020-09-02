@@ -1,6 +1,7 @@
 #pulls together all the modules to run the equations and input error checks
 import sys
 import calculations
+import helper
 
 args = sys.argv
 
@@ -8,9 +9,16 @@ def main(args):
     if len(args) > 1: #there is actually an input
         for argument in args[1:]:
             print ("New Calculation\n")
+            check = helper.error_checks(argument)
+            if check == -1:
+                continue
             #need to check input of equations to be valid
-            deg_arg = calculations.degree_poly(argument) #find the degree of the polynomial
-            red_arg = calculations.reduce_poly(argument) #reduce/simplify the polynomial equation
+            deg_arg = calculations.degree_poly(argument)
+            if deg_arg == -1:
+                continue #find the degree of the polynomial
+            red_arg = calculations.reduce_poly(argument)
+            if red_arg == -1:
+                continue
             answer = []
             if deg_arg <= 2:
                 terms = calculations.discriminant_poly(red_arg) #find the discriminant of the polynomial
