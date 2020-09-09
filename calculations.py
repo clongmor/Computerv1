@@ -1,9 +1,10 @@
 import re
 import helper
 
+#finds all the powers of X's. returns the highest power
 def degree_poly(eqn):
     exponents_list = []
-    var_list1 = re.findall("X{1}\^{1}[0-9]", eqn)
+    var_list1 = re.findall("X{1}\^{1}[0-9]+", eqn)
     var_list2 = re.findall("X{1}\s", eqn)
     i = 0
     while i < len(var_list2):
@@ -47,7 +48,7 @@ def reduce_poly(eqn):
             l_vars[i] = l_vars[i] + "^1"
         i += 1
 
-    #makes co-efficients negative as needed and adds in co-efficients and * where non-existent
+    #makes coefficients negative as needed and adds in coefficients and * where non-existent
     length_l = len(l_vars)
     length_r = len(r_vars)
     i = 0
@@ -61,27 +62,31 @@ def reduce_poly(eqn):
         l_vars.insert(i + 1, "*")
         length_l += 2
     while i < length_l - 1:
+        print (l_vars[i])
         if i == 0 and re.findall("X{1}\^{1}[0-9]", l_vars[i]):
             l_vars.insert(i, "*")
             l_vars.insert(i, "1")
             length_l += 2
-        elif re.findall("(-?\d+)\/(\d+)", l_vars[i]):
+        if not helper.is_number(l_vars[i]) and l_vars[i + 1] == "*" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 2]):
+            print ("error, co-efficient of", l_vars[i + 2], "is not a number.")
+            return (-1)
+        if re.findall("(-?\d+)\/(\d+)", l_vars[i]):
             digits = l_vars[i]. split("/")
             decimal = int(digits[0]) / int(digits[1])
             l_vars[i] = str(decimal)
             if i > 0 and l_vars[i - 1] == "-":
                 l_vars[i] = str(helper.to_negative(l_vars[i]))
-        elif helper.is_number(l_vars[i]) and l_vars[i + 1] != "*" and l_vars[i] != "0":
+        if helper.is_number(l_vars[i]) and l_vars[i + 1] != "*" and l_vars[i] != "0":
             l_vars.insert(i + 1, "X^0")
             l_vars.insert(i + 1, "*")
             length_l += 2
-        elif l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
+        if l_vars[i] == "-" and helper.is_number(l_vars[i + 1]):
             l_vars[i + 1] = str(helper.to_negative(l_vars[i + 1]))
-        elif l_vars[i] == "-" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
+        if l_vars[i] == "-" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
             l_vars.insert(i + 1, "*")
             l_vars.insert(i + 1, "-1")
             length_l += 2
-        elif l_vars[i] == "+" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
+        if l_vars[i] == "+" and re.findall("X{1}\^{1}[0-9]", l_vars[i + 1]):
             l_vars.insert(i + 1, "*")
             l_vars.insert(i + 1, "1")
             length_l += 2
@@ -99,23 +104,26 @@ def reduce_poly(eqn):
             r_vars.insert(j, "*")
             r_vars.insert(j, "1")
             length_r += 2
-        elif re.findall("(-?\d+)\/(\d+)", r_vars[j]):
+        if not helper.is_number(r_vars[j]) and r_vars[j + 1] == "*" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 2]):
+            print ("error, co-efficient of", r_vars[j + 2], "is not a number.")
+            return (-1)
+        if re.findall("(-?\d+)\/(\d+)", r_vars[j]):
             digits = r_vars[j]. split("/")
             decimal = int(digits[0]) / int(digits[1])
             r_vars[j] = str(decimal)
             if j > 0 and r_vars[j - 1] == "-":
                 r_vars[j] = str(helper.to_negative(r_vars[j]))
-        elif helper.is_number(r_vars[j]) and r_vars[j + 1] != "*" and r_vars[j] != "0":
+        if helper.is_number(r_vars[j]) and r_vars[j + 1] != "*" and r_vars[j] != "0":
             r_vars.insert(j + 1, "X^0")
             r_vars.insert(j + 1, "*")
             length_r += 2
-        elif r_vars[j] == "-" and helper.is_number(r_vars[j + 1]):
+        if r_vars[j] == "-" and helper.is_number(r_vars[j + 1]):
             r_vars[j + 1] = str(helper.to_negative(r_vars[j + 1]))
-        elif r_vars[j] == "-" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
+        if r_vars[j] == "-" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
             r_vars.insert(j + 1, "*")
             r_vars.insert(j + 1, "-1")
             length_r += 2
-        elif r_vars[j] == "+" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
+        if r_vars[j] == "+" and re.findall("X{1}\^{1}[0-9]", r_vars[j + 1]):
             r_vars.insert(j + 1, "*")
             r_vars.insert(j + 1, "1")
             length_r +=2
@@ -199,7 +207,7 @@ def reduce_poly(eqn):
                     r_vars[j - 2] = "0"
                     check = 1
                 i = i + 1
-            if check == 0:
+            if check == 0 and helper.is_number(r_vars[j - 2]):
                 if r_vars[j - 2][0] == "-":
                     l_vars.append("-")
                 else:
@@ -207,6 +215,9 @@ def reduce_poly(eqn):
                 l_vars.append(r_vars[j - 2])
                 l_vars.append(r_vars[j - 1])
                 l_vars.append(r_vars[j])
+            elif check == 0:
+                print ("on the right side of the equation, coefficient of", r_vars[i], "is not a number.")
+                return (-1)
             check = 0
         j = j + 1
     #converts negative numbers back to positive for printing
