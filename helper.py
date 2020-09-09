@@ -32,7 +32,6 @@ def to_number(string):
             return (-1)
 
 def quadratic_formula(a, b, c):
-    print(a, b, c)
     if a == 0 and b == 0 and c == 0:
         answer1 = "X ∈ R"
         answer2 = answer1

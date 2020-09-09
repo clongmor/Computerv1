@@ -321,11 +321,9 @@ def discriminant_poly(eqn):
             l_vars[i + 1] = str(helper.to_negative(l_vars[i + 1]))
         i = i + 1
     
-    print(l_vars)
     #pulls out the a b and c coefficients of the equation
     i = 0
     while i < length_l:
-        print (l_vars[i])
         if re.match("X\^[0][^\.]*", l_vars[i]) and (l_vars[i - 2].isdigit() or (l_vars[i - 2][0] == "-" and l_vars[i - 2][1:].isdigit())):
             terms["c"] = int(l_vars[i - 2])
         elif re.match("X\^[0][^\.]*", l_vars[i]) and helper.is_number(l_vars[i - 2]):
@@ -356,4 +354,4 @@ def solve_poly(vars_dict):
     answer_list = helper.quadratic_formula(vars_dict["a"], vars_dict["b"], vars_dict["c"])
 
     return (answer_list)
-    #some stuff
+    #some stuff 
