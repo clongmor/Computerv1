@@ -22,6 +22,8 @@ def main(args):
             answer = []
             if deg_arg <= 2:
                 terms = calculations.discriminant_poly(red_arg) #find the discriminant of the polynomial
+                if terms == -1:
+                    continue
                 disc = terms["discriminant"]
                 answer = calculations.solve_poly(terms) #use the simplified form of the equation to solve for the answer(s).
             print ("Reduced form:", red_arg)
