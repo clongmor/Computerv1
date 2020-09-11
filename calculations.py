@@ -205,7 +205,7 @@ def reduce_poly(eqn):
                     length_l -= 4
                 i = i + 1
         j = j + 1
-
+    print (l_vars)
     #does the addition/subtraction of like x power co-efficients across both sides of equation
     i = 0
     j = 0
@@ -256,7 +256,7 @@ def reduce_poly(eqn):
                 return (-1)
             check = 0
         j = j + 1
-
+    print (l_vars)
     #converts negative numbers back to positive for printing
     i = 0
     length_l = len(l_vars)
@@ -286,19 +286,24 @@ def reduce_poly(eqn):
                 del l_vars[i - 1]
                 length_l -= 1
         i = i + 1  
-    
+    print (l_vars)
     #removes any terms with co-efficient of zero
     i = 0
     while i < length_l:
         if length_l == 1 and l_vars[i] == "0":
             break
+        # if i == length_l - 1 and l_vars[i] == "0" or l_vars[i] == "0.0":
         if (l_vars[i] == "0" or l_vars[i] == "0.0") and l_vars[i + 1] == "*":
-            del l_vars[i - 1:i + 3]
-            length_l -= 3
+            if length_l == 3:
+                del l_vars[i:i + 3]
+                length_l -=3
+            else:
+                del l_vars[i - 1:i + 3]
+                length_l -= 4
         i += 1
     if not l_vars:
         l_vars.append("0")
-    
+    print (l_vars)
     l_vars.append("=")
     l_vars.append("0")
     reduced_form = " ".join(l_vars)      
