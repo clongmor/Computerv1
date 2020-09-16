@@ -262,16 +262,28 @@ def reduce_poly(eqn):
     length_l = len(l_vars)
     while i < length_l:
         if helper.is_negative(l_vars[i]) and (i == 0 or l_vars[i - 1] != "-"):
-            try:
-                l_vars[i] = str(int(l_vars[i]) * -1)
-                l_vars.insert(i, "-")
-                length_l += 1
-                i += 1
-            except ValueError:
-                l_vars[i] = str(float(l_vars[i]) * -1)
-                l_vars.insert(i, "-")
-                length_l += 1
-                i += 1
+            if (i == 0):
+                try:
+                    l_vars[i] = str(int(l_vars[i]) * -1)
+                    l_vars.insert(i, "-")
+                    length_l += 1
+                    i += 1
+                except ValueError:
+                    l_vars[i] = str(float(l_vars[i]) * -1)
+                    l_vars.insert(i, "-")
+                    length_l += 1
+                    i += 1
+            else:
+                try:
+                    l_vars[i] = str(int(l_vars[i]) * -1)
+                    l_vars.insert(i, "-")
+                    del l_vars[i -1:i]
+                    i += 1
+                except ValueError:
+                    l_vars[i] = str(float(l_vars[i]) * -1)
+                    l_vars.insert(i, "-")
+                    del l_vars[i -1:i]
+                    i += 1
         elif helper.is_negative(l_vars[i]) and l_vars[i - 1] == "-":
             try:
                 l_vars[i] = str(int(l_vars[i]) * -1)
